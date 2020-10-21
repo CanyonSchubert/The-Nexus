@@ -65,13 +65,13 @@ client.on('message', message => {
 		return message.reply(reply);
 	}
 	
-	if (!cooldowns.has(command.name)) {
-		cooldowns.set(command.name, new Discord.Collection());
+	if (!cooldowns.has(cmd.name)) {
+		cooldowns.set(cmd.name, new Discord.Collection());
 	}
 	
 	const now = Date.now();
-	const timestamps = cooldowns.get(command.name);
-	const cooldownAmount = (command.cooldown || 3) * 1000;
+	const timestamps = cooldowns.get(cmd.name);
+	const cooldownAmount = (cmd.cooldown || 3) * 1000;
 	
 	if (timestamps.has(message.author.id)) {
 		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
