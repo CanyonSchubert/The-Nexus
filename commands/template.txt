@@ -1,0 +1,15 @@
+const { prefix } = require('../auth.json');
+const Discord = require('discord.js');
+
+module.exports = {
+	name: '',
+	aliases: [],
+	description: '',
+	args: ,
+	argoptions: [],
+	usage: ,
+	cooldown: ,
+	async execute(message, args) {
+		
+	},
+};
