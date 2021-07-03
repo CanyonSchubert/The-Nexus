@@ -136,7 +136,7 @@ exports.getAllRawVersionsAndChampionsData = async function() {
 
     var raw = {
         version : versions[0],
-        champions: champions
+        champions : champions
     }
 
     return raw;

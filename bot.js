@@ -17,6 +17,8 @@ for (const file of commandFiles) {
 
 const cooldowns = new Discord.Collection();
 
+var requestID = 1;
+
 	// Initializes Bot
 
 client.once('ready', () => {
@@ -25,7 +27,7 @@ client.once('ready', () => {
 
 client.login(token);
 
-module.export = { client };
+module.exports = { client };
 
 	// Message Handler
 
@@ -36,8 +38,10 @@ client.on('message', message => {
 	if (!(message.content.substring(0, prefix.length) == prefix && message.content != prefix)) {
 		return;
 	}
-	
-	console.log(message.content);
+
+	console.log("\nRequest ID: " + requestID + ' (Opened)');
+	console.log('Request Author Tag: ' + message.author.tag + ' (' + message.author.id + ')');
+	console.log('Request Location: ' + message.guild.name + ' (' + message.guild.id + ')');
 	
 	let args = message.content.substring(prefix.length).split(/ +/);
 	
@@ -45,7 +49,7 @@ client.on('message', message => {
 	console.log('Command: ' + commandName);
 	
 	args = args.splice(1);
-	console.log('Argument: ' + args + '\n');
+	console.log('Argument: ' + args);
 	
 	if (!client.commands.has(commandName)) return message.reply('use "' + prefix + 'help" for a list of commands.');
 	
@@ -73,7 +77,7 @@ client.on('message', message => {
 	const timestamps = cooldowns.get(cmd.name);
 	const cooldownAmount = (cmd.cooldown || 3) * 1000;
 	
-	if (timestamps.has(message.author.id)) {
+	if (timestamps.has(message.author.id) && !message.author.bot) {
 		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 		
 		if (now < expirationTime) {
@@ -92,5 +96,6 @@ client.on('message', message => {
 		message.reply('there was an error trying to execute your command!');
 	}
 	
-	console.log('Command handled.');
+	console.log('Request ID: ' + requestID + ' (Handled)\n');
+	++requestID;
 });
