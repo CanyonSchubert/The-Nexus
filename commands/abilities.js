@@ -9,7 +9,6 @@ module.exports = {
 	args: true,
 	usage: prefix + 'abilities [champion name] **OR** ' + prefix + 'abilities [champion name] [p, q, w, e, OR r]',
 	async execute(message, args) {
-		const { client } = require('../bot.js');
 		
 		if (args[args.length-1].toLowerCase() == 'p' || args[args.length-1].toLowerCase() == 'q' || 
 			args[args.length-1].toLowerCase() == 'w' || args[args.length-1].toLowerCase() == 'e' || 
