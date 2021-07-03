@@ -55,6 +55,49 @@ exports.getChampionByKey = async function(key) {
 
 exports.getChampionByName = async function(name) {
 
+	console.log('./champion.js getChampionByName function entered!');
+	
+	var raw = await this.getAllRawVersionsAndChampionsData();
+
+	var championId = "Not Found";
+	for (var x in raw.champions.data) 
+        if (raw.champions.data[x].name.toLowerCase() == name.toLowerCase()) {
+            championId = raw.champions.data[x].id;
+			break;
+		}
+		else if (raw.champions.data[x].id.toLowerCase() == name.toLowerCase()) {
+			championId = raw.champions.data[x].id;
+			break;
+		}
+		else if (raw.champions.data[x].name.toLowerCase().includes(name.toLowerCase())) {
+			championId = raw.champions.data[x].id;
+		}
+		else if (raw.champions.data[x].id.toLowerCase().includes(name.toLowerCase())) {
+			championId = raw.champions.data[x].id;	
+		}
+		else {
+			for (var i = 0; i < this.specialCases().length; ++i) {
+				if (this.specialCases()[i].case.toLowerCase() == name.toLowerCase()) {
+					championId = this.specialCases()[i].id;
+					break;
+				}
+			}
+		}
+
+	var champion = await this.getAllRawChampionData(raw.version, championId);
+	if (champion == undefined)
+		return "Champion not found.";
+			
+	var data = champion.data[championId];
+	//console.log(data);
+
+	const resultChampion = this.setChampion(data.id, data.key, data.name, data.title, 
+		data.image, data.tags, data.stats, data.spells, data.passive, raw.versions);
+	console.log('Champion Pack filled successfully!');
+
+	console.log('Returning from getChampionByName function in ./champion.js!');
+	
+	return resultChampion;
 }
 
 exports.setChampion = function(id, key, name, title, image, tags, stats, spells, passive, version) {
@@ -104,7 +147,56 @@ exports.getAllRawChampionData = async function(version, id) {
     ddragonAPIStr = 'http://ddragon.leagueoflegends.com/cdn/' + version + '/data/en_US/champion/' + id + '.json';
 	var champion = await fetch(ddragonAPIStr)
 		.then(response => { return response.json() })
-		.catch(error => { console.log('Error getting random champion data: ' + err) });
+		.catch(err => { console.log('Error getting champion data: ' + err); });
 
     return champion;
+}
+
+exports.specialCases = function() {
+	var specialCases = [
+		{ case : "cow", id : "Alistar" },
+		{ case : "mummy", id : "Amumu" },
+		{ case : "moon boi", id : "Aphelios" },
+		{ case : "asol", id : "AurelionSol" },
+		{ case : "gp", id : "Gangplank" },
+		{ case : "j4", id : "JarvanIV" },
+		{ case : "4", id : "Jhin" },
+		{ case : "powder", id : "Jinx" },
+		{ case : "rhaast", id : "Kayn" },
+		{ case : "k6", id : "Khazix" },
+		{ case : "lamb", id : "Kindred" },
+		{ case : "wolf", id : "Kindred" },
+		{ case : "lb", id : "Leblanc" },
+		{ case : "bambi", id : "Lillia" },
+		{ case : "luxanna", id : "Lux" },
+		{ case : "mf", id : "MissFortune" },
+		{ case : "susan", id : "Nasus" },
+		{ case : "atreus", id : "Pantheon" },
+		{ case : "poopy", id : "Poppy" },
+		{ case : "qiqi", id : "Qiyana" },
+		{ case : "valor", id : "Quinn" },
+		{ case : "ok", id : "Rammus" },
+		{ case : "okay", id : "Rammus" },
+		{ case : "knife cat", id : "Rengar" },
+		{ case : "bristle", id : "Sejuani" },
+		{ case : "dio", id : "Sett" },
+		{ case : "sriracha", id : "Soraka" },
+		{ case : "jericho", id : "Swain" },
+		{ case : "tk", id : "TahmKench" },
+		{ case : "thomas kenchington", id : "TahmKench" },
+		{ case : "teeto", id : "Teemo" },
+		{ case : "satan", id : "Teemo" },
+		{ case : "tito", id : "Teemo" },
+		{ case : "troll", id : "Trundle" },
+		{ case : "tf", id : "TwistedFate" },
+		{ case : "rat", id : "Twitch" },
+		{ case : "godyr", id : "Udyr" },
+		{ case : "kai and valmar", id : "Varus" },
+		{ case : "the ruined king", id : "Viego" },
+		{ case : "ww", id : "Warwick" },
+		{ case : "monkey", id : "MonkeyKing" },
+		{ case : "cat", id : "Yuumi" }
+	]
+
+	return specialCases;
 }
