@@ -58,9 +58,9 @@ module.exports = {
 				console.log('Error deleting emoji: "' + error.stack + '"');
 			}
 		}
-		console.log(emojiServer.name + ': ' + delPromises.length + ' deletion promises now exist.');
+		console.log(emojiServer.name + ': ' + delPromises.length + ' deletion promises now exist\n');
 		await Promise.all(delPromises);
-		console.log(emojiServer.name + ': All emojis deleted.');
+		console.log(emojiServer.name + ': All emojis deleted\n');
 		
 		//champion emoji servers are LEServers[1+], LEServers[0] is reserved for special emojis like mastery crests. (look into automating LEServer[0])
 		switch(emojiServer) {
@@ -144,8 +144,8 @@ module.exports = {
             }
         }
         
-        console.log(emojiServer.name + ': ' + addPromises.length + ' creation promises exist.');
+        console.log(emojiServer.name + ': ' + addPromises.length + ' creation promises exist.\n');
         await Promise.all(addPromises);
-        console.log(emojiServer.name + ': All emojis created!');
+        console.log(emojiServer.name + ': All emojis created!\n');
     }
 };
