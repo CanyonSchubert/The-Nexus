@@ -1,4 +1,5 @@
-var Youtube = require('https://www.googleapis.com/youtube/v3');
+const { prefix } = require('../bot.js');
+const GoogleAPI = require('');
 
 module.exports = {
     name: 'skillcapped',
@@ -6,7 +7,7 @@ module.exports = {
     description: 'This command will return the most relevant Skillcapped video based on your search.',
     args: true,
     argoptions: ['[search]'],
-    usage: prefix + 'skillcapped [search]',
+    usage: 'skillcapped [search]',
     cooldown: 10,
     async execute(message, args) {
 
@@ -16,9 +17,17 @@ module.exports = {
 
         args = args.join(' ');
 
-        var searchResults = Youtube.Search.list('id,snippet', {q: args, maxResults: 1});
-
-        console.log(searchResults.items);
+        GoogleAPI.load("client", () => {
+            GoogleAPI.client.setAPIKey('AIzaSyCXTeH5h1pGUjN-xDSeL1Nm4m1MnBBx8IA');
+            return GoogleAPI.client.load('https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest')
+                .then(() => {
+                    console.log('GoogleAPI client loaded for API');
+                }, (err) => {
+                    console.log('Error loading GoogleAPI client for API.', err.stack);
+                })
+                
+        });
+        //console.log(searchResults.items);
 
     }
 }

@@ -7,7 +7,7 @@ module.exports = {
 	description: 'This command lists out all other commands. If given a command as an argument, it will give details about that command.',
 	args: false,
 	argoptions: ['[command]'],
-	usage: prefix + 'help **OR** ' + prefix + 'help [command]',
+	usage: 'help **OR** ' + prefix + 'help [command]',
 	cooldown: 0,
 	async execute(message, args) {
 		
@@ -44,8 +44,10 @@ module.exports = {
 		if (command.description) data.push('**Description**: ' + command.description);
 		if (command.args) data.push('**Arguments**: Required');
 		if (command.argoptions) data.push('**Valid Arguments**: ' + command.argoptions.join(', '));
-		if (command.usage) data.push('**Usage**: ' + command.usage);
-		if (command.cooldown) data.push('**Cooldown**: ' + command.cooldown);
+		if (command.usage) data.push('**Usage**: ' + prefix + command.usage);
+		if (command.cooldown) {
+			data.push('**Cooldown**: ' + command.cooldown + ' seconds');
+		}
 		
 		var val = '';
 		for (var x in data) {

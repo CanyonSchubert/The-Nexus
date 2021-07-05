@@ -6,7 +6,7 @@ module.exports = {
 	description: 'Refreshes the emoji storage servers used for the bot. Only usable by the bot creator.',
 	cooldown: 259200,
 	args: false,
-	usage: prefix + 'emojis',
+	usage: 'emojis',
 	async execute(message, args) {
 		const client = require('../bot.js').client;
 		

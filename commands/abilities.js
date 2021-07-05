@@ -7,7 +7,7 @@ module.exports = {
 	name: 'abilities',
 	description: 'Gives details about all of a given champion\'s abilities, or a single one of them.',
 	args: true,
-	usage: prefix + 'abilities [champion name] **OR** ' + prefix + 'abilities [champion name] [p, q, w, e, OR r]',
+	usage: 'abilities [champion name] **OR** ' + prefix + 'abilities [champion name] [p, q, w, e, OR r]',
 	async execute(message, args) {
 		
 		if (args[args.length-1].toLowerCase() == 'p' || args[args.length-1].toLowerCase() == 'q' || 

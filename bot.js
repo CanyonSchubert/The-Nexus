@@ -41,7 +41,10 @@ client.on('message', message => {
 
 	console.log("\nRequest ID: " + requestID + ' (Opened)');
 	console.log('Request Author Tag: ' + message.author.tag + ' (' + message.author.id + ')');
-	console.log('Request Location: ' + message.guild.name + ' (' + message.guild.id + ')');
+	if (message.guild)
+		console.log('Request Location: ' + message.guild.name + ' (' + message.guild.id + ')');
+	else 
+		console.log('Request Location: DM');
 	
 	let args = message.content.substring(prefix.length).split(/ +/);
 	
@@ -63,7 +66,7 @@ client.on('message', message => {
 		let reply = 'this command requires arguments to be provided for it.';
 		
 		if (cmd.usage) {
-			reply += '\nex. ```' + prefix + cmd.name + ' ' + cmd.usage + '```';
+			reply += '\nex. ```' + prefix + cmd.usage + '```';
 		}
 		
 		return message.reply(reply);
