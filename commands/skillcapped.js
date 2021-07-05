@@ -18,7 +18,7 @@ module.exports = {
         args = args.join(' ');
 
         GoogleAPI.load("client", () => {
-            GoogleAPI.client.setAPIKey('AIzaSyCXTeH5h1pGUjN-xDSeL1Nm4m1MnBBx8IA');
+            GoogleAPI.client.setAPIKey('');
             return GoogleAPI.client.load('https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest')
                 .then(() => {
                     console.log('GoogleAPI client loaded for API');
