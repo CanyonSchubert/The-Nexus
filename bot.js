@@ -3,7 +3,7 @@
 const fs = require('fs');
 const fetch = require('fetch');
 const Discord = require('discord.js');
-const {token, riot_api_key, prefix } = require('./auth.json');
+const {token, riot_api_key, prefix, dev_mode } = require('./auth.json');
 
 	// Initializes Command Collection and Some Options
 	
