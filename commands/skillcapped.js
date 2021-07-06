@@ -91,7 +91,7 @@ module.exports = {
                     replySearchIndex = onCollect(reaction.emoji, message, replySearchIndex);
                 });
                 reactionCollector.on('end', () => {
-                    message.clearReactions();
+                    message.reactions.removeAll();
                 });
             }
 
