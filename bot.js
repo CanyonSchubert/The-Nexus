@@ -19,10 +19,24 @@ const cooldowns = new Discord.Collection();
 
 var requestID = 1;
 
+var devModeOptions = {
+	devMode : true,
+	autoTest : true,
+	workingCmd : 'abilities tf',
+}
+
 	// Initializes Bot
 
 client.once('ready', () => {
 	console.log('Connected as: ' + client.user.username + '!\n');
+
+		// DEV MODE: Bot sends current working command on startup
+	if (devModeOptions.devMode && devModeOptions.autoTest) {
+		var NexusggDevRoom = '767430610133581865';
+
+		NexusggDevRoom = client.channels.cache.get(NexusggDevRoom);
+		NexusggDevRoom.send(prefix + devModeOptions.workingCmd);
+	}
 });
 
 client.login(token);
