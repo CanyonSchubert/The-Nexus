@@ -1,7 +1,6 @@
 const ChampionAPI = require('../Models/ChampionModel');
 const Discord = require('discord.js');
 const { prefix } = require('../auth.json');
-const fetch = require('node-fetch');
 
 module.exports = {
 	name: 'abilities',

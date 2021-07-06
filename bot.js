@@ -3,7 +3,7 @@
 const fs = require('fs');
 const fetch = require('fetch');
 const Discord = require('discord.js');
-const {token, api_key, prefix } = require('./auth.json');
+const {token, riot_api_key, prefix } = require('./auth.json');
 
 	// Initializes Command Collection and Some Options
 	
@@ -32,12 +32,29 @@ module.exports = { client };
 	// Message Handler
 
 client.on('message', message => {
+
+		// Ignores messages from bots that aren't itself
+
+	if (message.author.bot && message.author.id != '766914741758066688')
+		return;
 	
 		// Ignores messages that don't start with the bot prefix
 	
 	if (!(message.content.substring(0, prefix.length) == prefix && message.content != prefix)) {
 		return;
 	}
+
+		// Sets up the command name and args
+
+	let args = message.content.substring(prefix.length).split(/ +/);
+	const commandName = args[0].toLowerCase();
+	args = args.splice(1);
+
+		// Sets up high level bot variables
+
+	var youtubeQuota = 0;
+
+		// Sets up console logs for each request
 
 	console.log("\nRequest ID: " + requestID + ' (Opened)');
 	console.log('Request Author Tag: ' + message.author.tag + ' (' + message.author.id + ')');
@@ -46,16 +63,15 @@ client.on('message', message => {
 	else 
 		console.log('Request Location: DM');
 	
-	let args = message.content.substring(prefix.length).split(/ +/);
-	
-	const commandName = args[0].toLowerCase();
 	console.log('Command: ' + commandName);
-	
-	args = args.splice(1);
 	console.log('Argument: ' + args);
-	
+
+		// If command doesn't exist
+
 	if (!client.commands.has(commandName)) return message.reply('use "' + prefix + 'help" for a list of commands.');
 	
+		// Basic command set up
+
 	const cmd = client.commands.get(commandName);
 	
 	if (cmd.guildOnly && message.channel.type != 'text') {
@@ -71,6 +87,17 @@ client.on('message', message => {
 		
 		return message.reply(reply);
 	}
+
+		// Pre-command handling
+
+	if (commandName == "skillcapped") { // Add OR statements for any other commands adding to the youtube quota.
+		++youtubeQuota;
+	}
+	if (youtubeQuota > 100) {
+		return message.reply('Sorry, I\'ve reached my YouTube quota limit for the day. Please try again tomorrow.');
+	}
+
+		// Command cooldown and expiry
 	
 	if (!cooldowns.has(cmd.name)) {
 		cooldowns.set(cmd.name, new Discord.Collection());
@@ -91,6 +118,8 @@ client.on('message', message => {
 	
 	timestamps.set(message.author.id, now);
 	setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+
+		// Command execution
 	
 	try {
 		cmd.execute(message, args);
@@ -98,6 +127,8 @@ client.on('message', message => {
 		console.error(error);
 		message.reply('there was an error trying to execute your command!');
 	}
+
+		// Post-command handling
 	
 	console.log('Request ID: ' + requestID + ' (Handled)\n');
 	++requestID;
