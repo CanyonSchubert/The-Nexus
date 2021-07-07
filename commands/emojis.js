@@ -8,7 +8,7 @@ module.exports = {
 	args: false,
 	usage: 'emojis',
 	async execute(message, args) {
-		const client = require('../bot.js').client;
+		const { client } = require('../bot.js');
 		
 		const myID = '147858725233754112';
 		const botID = '766914741758066688';

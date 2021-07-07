@@ -4,6 +4,7 @@ const fs = require('fs');
 const fetch = require('fetch');
 const Discord = require('discord.js');
 const {token, riot_api_key, prefix, dev_mode } = require('./auth.json');
+const AutoTest = require('./dev-functions/AutoTest');
 
 	// Initializes Command Collection and Some Options
 	
@@ -19,9 +20,10 @@ const cooldowns = new Discord.Collection();
 
 var requestID = 1;
 
-var devModeOptions = {
+const devModeOptions = {
 	devMode : true,
 	autoTest : true,
+	autoTestChannel : '767430610133581865',
 	workingCmd : 'abilities tf',
 }
 
@@ -30,18 +32,18 @@ var devModeOptions = {
 client.once('ready', () => {
 	console.log('Connected as: ' + client.user.username + '!\n');
 
-		// DEV MODE: Bot sends current working command on startup
-	if (devModeOptions.devMode && devModeOptions.autoTest) {
-		var NexusggDevRoom = '767430610133581865';
-
-		NexusggDevRoom = client.channels.cache.get(NexusggDevRoom);
-		NexusggDevRoom.send(prefix + devModeOptions.workingCmd);
+		// DEV MODE: AutoTest
+	if (devModeOptions.devMode) {
+		AutoTest.execute();
 	}
 });
 
 client.login(token);
 
-module.exports = { client };
+module.exports = { 
+	client : client,
+	devModeOptions : devModeOptions,
+ };
 
 	// Message Handler
 

@@ -1,4 +1,5 @@
 const { prefix } = require('../auth.json');
+const AutoTest = require('../dev-functions/AutoTest');
 
 module.exports = {
 	name: 'reload',
@@ -9,7 +10,7 @@ module.exports = {
 	usage: 'reload [command]',
     cooldown: 10,
 	execute(message, args) {
-		const client = require('../bot.js').client;
+		const { client, devModeOptions } = require('../bot.js');
 		
 		const commandName = args[0].toLowerCase();
 		const cmd = client.commands.get(commandName);
@@ -37,6 +38,11 @@ module.exports = {
 		} catch (error) {
 			console.log('Error setting the new command: "' + error.stack + '"');
 			return message.channel.send('An error occurred while trying to reload the command.');
+		}
+
+			// DEV MODE: AutoTest
+		if (devModeOptions.devMode && commandName == devModeOptions.workingCmd) {
+			AutoTest.execute();
 		}
 
 		message.channel.send('"' + prefix + commandName + '" was reloaded successfully!');
