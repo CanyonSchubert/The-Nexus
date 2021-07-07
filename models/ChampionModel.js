@@ -3,12 +3,13 @@
  * 
  * uses tutorial at https://stackoverflow.com/questions/44980247/how-to-finish-all-fetch-before-executing-next-function-in-react
  */
-var fetch = require('node-fetch');
+const fetch = require('node-fetch');
+const { devMode } = require('../appConfig.json');
 var ddragonAPIStr;
 
 exports.getRandomChampion = async function(id) {
 	
-	console.log('./ChampionModel.js getRandomChampion function entered!');
+	if (devMode.isOn) console.log('./ChampionModel.js getRandomChampion function entered!');
 	
 	var raw = await this.getAllRawVersionsAndChampionsData();
 
@@ -22,16 +23,16 @@ exports.getRandomChampion = async function(id) {
 
 	const resultChampion = this.setChampion(data.id, data.key, data.name, data.title, 
 		data.image, data.tags, data.stats, data.spells, data.passive, raw.version);
-	console.log('Champion Pack filled successfully!');
+	if (devMode.isOn) console.log('Champion Pack filled successfully!');
 
-	console.log('Returning from getRandomChampion function in ./ChampionModel.js!');
+	if (devMode.isOn) console.log('Returning from getRandomChampion function in ./ChampionModel.js!');
 	
 	return resultChampion;
 }
 
 exports.getChampionByKey = async function(key) {
 
-    console.log('./champion.js getChampionByKey function entered!');
+    if (devMode.isOn) console.log('./ChampionModel.js getChampionByKey function entered!');
 	
 	var raw = await this.getAllRawVersionsAndChampionsData();
 
@@ -46,16 +47,16 @@ exports.getChampionByKey = async function(key) {
 
 	const resultChampion = this.setChampion(data.id, data.key, data.name, data.title, 
 		data.image, data.tags, data.stats, data.spells, data.passive, raw.versions);
-	console.log('Champion Pack filled successfully!');
+	if (devMode.isOn) console.log('Champion Pack filled successfully!');
 
-	console.log('Returning from getChampionByKey function in ./champion.js!');
+	if (devMode.isOn) console.log('Returning from getChampionByKey function in ./ChampionModel.js!');
 	
 	return resultChampion;
 }
 
 exports.getChampionByName = async function(name) {
 
-	console.log('./champion.js getChampionByName function entered!');
+	if (devMode.isOn) console.log('./ChampionModel.js getChampionByName function entered!');
 	
 	var raw = await this.getAllRawVersionsAndChampionsData();
 
@@ -93,16 +94,16 @@ exports.getChampionByName = async function(name) {
 
 	const resultChampion = this.setChampion(data.id, data.key, data.name, data.title, 
 		data.image, data.tags, data.stats, data.spells, data.passive, raw.versions);
-	console.log('Champion Pack filled successfully!');
+	if (devMode.isOn) console.log('Champion Pack filled successfully!');
 
-	console.log('Returning from getChampionByName function in ./champion.js!');
+	if (devMode.isOn) console.log('Returning from getChampionByName function in ./ChampionModel.js!');
 	
 	return resultChampion;
 }
 
 exports.setChampion = function(id, key, name, title, image, tags, stats, spells, passive, version) {
     
-    console.log('./ChampionModel.js setChampion function entered!');
+    if (devMode.isOn) console.log('./ChampionModel.js setChampion function entered!');
 	
 	var championData = {
 		id : id,
@@ -117,7 +118,7 @@ exports.setChampion = function(id, key, name, title, image, tags, stats, spells,
 		version : version
 	};
 	
-	console.log('Return from setChampion function in ./ChampionModel.js');
+	if (devMode.isOn) console.log('Return from setChampion function in ./ChampionModel.js');
 	
 	return championData;
 }

@@ -1,4 +1,4 @@
-const { prefix } = require('../auth.json');
+const { prefix } = require('../appConfig.json');
 const Discord = require('discord.js');
 
 module.exports = {
@@ -10,8 +10,7 @@ module.exports = {
 	usage: 'help **OR** ' + prefix + 'help [command]',
 	cooldown: 0,
 	async execute(message, args) {
-		
-		const { client } = require('../bot.js');
+
 		const data = [];
 		const { commands } = message.client;
 		

@@ -1,15 +1,15 @@
-const { prefix } = require('../auth.json');
+const { prefix, devMode } = require('../appConfig.json');
 
 module.exports =  {
 
     async execute() {
 
-        const { client, devModeOptions } = require('../bot.js');
+        const { client } = require('../bot.js');
 
             // DEV MODE: Bot sends current working command on startup
-        if (devModeOptions.devMode && devModeOptions.autoTest && devModeOptions.autoTestChannel) {
-            var autoTestChannel = client.channels.cache.get(devModeOptions.autoTestChannel);
-            autoTestChannel.send(prefix + devModeOptions.workingCmd);
+        if (devMode.isOn && devMode.autoTest && devMode.autoTestChannel) {
+            var autoTestChannel = client.channels.cache.get(devMode.autoTestChannel);
+            autoTestChannel.send(prefix + devMode.workingCmd);
         }
     }
 }

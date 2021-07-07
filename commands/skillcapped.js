@@ -4,6 +4,7 @@
  */
 
 const { youtube_api_key } = require('../auth.json');
+const { devMode } = require('../appConfig.json');
 const Youtube = require('youtube-search');
 const Discord = require('discord.js');
 
@@ -72,7 +73,7 @@ module.exports = {
             const reactionNav = [reactionPrev, reactionNext];
             const killTimer = 1200000;
 
-            console.log('Displaying the link to: "' + searchResults.results[0].title + '" from ' + searchResults.results[0].channelTitle);
+            if (devMode.isOn) console.log('Displaying the link to: "' + searchResults.results[0].title + '" from ' + searchResults.results[0].channelTitle);
             message.reply('here is the Skill Capped video most relevant to your search! If you would like a different video with the same search, use the navigation reactions under the video preview.');
             return message.channel.send(searchResults.results[0].link)
                 .then(message => message.react(reactionPrev))
@@ -100,11 +101,11 @@ module.exports = {
             function onCollect(emoji, message, replySearchIndex) {
                 if (emoji.name === reactionPrev && replySearchIndex > 0) {
                     message.edit(searchResults.results[--replySearchIndex].link);
-                    console.log('Displaying the link to: "' + searchResults.results[replySearchIndex].title + '" from ' + searchResults.results[replySearchIndex].channelTitle);
+                    if (devMode.isOn) console.log('Displaying the link to: "' + searchResults.results[replySearchIndex].title + '" from ' + searchResults.results[replySearchIndex].channelTitle);
                 }
                 else if (emoji.name === reactionNext && replySearchIndex < searchResults.results.length - 1) {
                     message.edit(searchResults.results[++replySearchIndex].link);
-                    console.log('Displaying the link to: "' + searchResults.results[replySearchIndex].title + '" from ' + searchResults.results[replySearchIndex].channelTitle);
+                    if (devMode.isOn) console.log('Displaying the link to: "' + searchResults.results[replySearchIndex].title + '" from ' + searchResults.results[replySearchIndex].channelTitle);
                 }
                 else if ((emoji.name === reactionPrev && replySearchIndex == 0) || (emoji.name === reactionNext && replySearchIndex == searchResults.results.length - 1)) {
                     message.react(reactionLimits)

@@ -1,4 +1,4 @@
-const { prefix } = require('../auth.json');
+const { prefix, devMode } = require('../appConfig.json');
 const ChampionAPI = require('../models/ChampionModel')
 
 module.exports = {
@@ -47,20 +47,20 @@ module.exports = {
 
 		const toDelete = emojiServer.emojis.cache.map(emoji => emoji);
 		var delPromises = [];
-		console.log(emojiServer.name + ': ' + toDelete.length + ' emojis exist.');
+		if (devMode.isOn) console.log(emojiServer.name + ': ' + toDelete.length + ' emojis exist.');
 		for (var i = 0; i < toDelete.length; ++i) {
 			try {
 				var x = emojiServer.emojis.cache.find(emoji => emoji === toDelete[i]).name;
 				delPromises.push(toDelete[i].delete());
-				console.log(emojiServer.name + ': Emoji deletion queued for ' + x);
+				if (devMode.isOn) console.log(emojiServer.name + ': Emoji deletion queued for ' + x);
 				message.channel.send(x + '\'s emoji has been queued for deleted.');
 			} catch (error) {
 				console.log('Error deleting emoji: "' + error.stack + '"');
 			}
 		}
-		console.log(emojiServer.name + ': ' + delPromises.length + ' deletion promises now exist\n');
+		if (devMode.isOn) console.log(emojiServer.name + ': ' + delPromises.length + ' deletion promises now exist\n');
 		await Promise.all(delPromises);
-		console.log(emojiServer.name + ': All emojis deleted\n');
+		if (devMode.isOn) console.log(emojiServer.name + ': All emojis deleted\n');
 		
 		//champion emoji servers are LEServers[1+], LEServers[0] is reserved for special emojis like mastery crests. (look into automating LEServer[0])
 		switch(emojiServer) {
@@ -86,7 +86,7 @@ module.exports = {
 				break;
 		}
 		
-		console.log('Emoji refresh has been executed for: ' + emojiServer.name);
+		if (devMode.isOn) console.log('Emoji refresh has been executed for: ' + emojiServer.name);
 		message.channel.send('the emojis here have been renewed! :relieved:');
 	},
     specialClausesCheck(name) {
@@ -131,12 +131,12 @@ module.exports = {
             }
             
             champion.name = this.specialClausesCheck(champion.name);
-			console.log(champion.name);
+			//console.log(champion.name);
             
             try {
                 addPromises.push(emojiServer.emojis.create('http://ddragon.leagueoflegends.com/cdn/' + raw.version + '/img/champion/' + champion.image.full, champion.name)
                     .then(emoji => {
-                        console.log(emojiServer.name + ': Emoji created for ' + emoji.name);
+                        if (devMode.isOn) console.log(emojiServer.name + ': Emoji created for ' + emoji.name);
                         message.channel.send('Emoji created for: ' + emoji.toString());
                     }));
             } catch (error) {
@@ -144,8 +144,8 @@ module.exports = {
             }
         }
         
-        console.log(emojiServer.name + ': ' + addPromises.length + ' creation promises exist.\n');
+        if (devMode.isOn) console.log(emojiServer.name + ': ' + addPromises.length + ' creation promises exist.\n');
         await Promise.all(addPromises);
-        console.log(emojiServer.name + ': All emojis created!\n');
+        if (devMode.isOn) console.log(emojiServer.name + ': All emojis created!\n');
     }
 };

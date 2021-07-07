@@ -1,4 +1,4 @@
-const { prefix } = require('../auth.json');
+const { prefix, devMode } = require('../appConfig.json');
 const AutoTest = require('../dev-functions/AutoTest');
 
 module.exports = {
@@ -24,24 +24,24 @@ module.exports = {
 		}
         else if (!cmd && args[1] == '--save' && message.author.id == myID) {
 			// skips the delete statement and just adds a new command
-			console.log('Adding a new command');
+			if (devMode.isOn) console.log('Adding a new command');
 		}
 		else {
 			delete require.cache[require.resolve('./' + commandName + '.js')];
-            console.log('Deleting ' + commandName + '.js');
+            if (devMode.isOn) console.log('Deleting ' + commandName + '.js');
 		}
 		
 		try {
 			const newCmd = require('./' + commandName + '.js');
 			client.commands.set(newCmd.name, newCmd);
-            console.log('Adding ' + commandName + '.js');
+            if (devMode.isOn) console.log('Adding ' + commandName + '.js');
 		} catch (error) {
 			console.log('Error setting the new command: "' + error.stack + '"');
 			return message.channel.send('An error occurred while trying to reload the command.');
 		}
 
 			// DEV MODE: AutoTest
-		if (devModeOptions.devMode && commandName == devModeOptions.workingCmd) {
+		if (devMode.isOn && devMode.autoTest && commandName == devMode.workingCmd) {
 			AutoTest.execute();
 		}
 
