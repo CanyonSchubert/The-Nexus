@@ -7,6 +7,6 @@
         "autoTest":true,
         "autoTestChannel":"767430610133581865",
         "workingCmd":"build",
-        "workingArgs":["tf","mid"]
+        "workingArgs":["tf","middle"]
     }
 }
