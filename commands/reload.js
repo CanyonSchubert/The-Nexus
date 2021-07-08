@@ -9,7 +9,7 @@ module.exports = {
     argoptions: ['[command]'],
 	usage: 'reload [command]',
     cooldown: 10,
-	execute(message, args) {
+	async execute(message, args) {
 		const { client, devModeOptions } = require('../bot.js');
 		
 		const commandName = args[0].toLowerCase();

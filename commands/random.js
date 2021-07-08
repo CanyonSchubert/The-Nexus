@@ -7,7 +7,7 @@ module.exports = {
 	async execute(message, args) {
 		var champion;
 		try {
-			champion = await Champion.getRandomChampion('random');
+			champion = await Champion.getRandomChampion();
 		} catch (error) {
 			console.log(error);
 			return message.channel.send('The randomizer misfired, play the dumbest champion you can think of.');

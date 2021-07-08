@@ -2,3 +2,4 @@ npm install fetch
 npm install discord.js
 npm install fs
 npm install youtube-search
+npm i puppeteer --save (this is needed for web scraping for builds, once we shift to a database model this should no longer be necessary)

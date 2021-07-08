@@ -7,7 +7,7 @@ const fetch = require('node-fetch');
 const { devMode } = require('../appConfig.json');
 var ddragonAPIStr;
 
-exports.getRandomChampion = async function(id) {
+exports.getRandomChampion = async function() {
 	
 	if (devMode.isOn) console.log('./ChampionModel.js getRandomChampion function entered!');
 	
@@ -54,9 +54,21 @@ exports.getChampionByKey = async function(key) {
 	return resultChampion;
 }
 
-exports.getChampionByName = async function(name) {
+exports.getChampionByName = async function(args) {
 
 	if (devMode.isOn) console.log('./ChampionModel.js getChampionByName function entered!');
+
+	if (args[0].includes('\'')) {
+		var voidChampionFix = args[0].split('\'');
+		voidChampionFix[1] = voidChampionFix[1].charAt(0).toUpperCase() + voidChampionFix[1].slice(1);
+		args[0] = voidChampionFix.join('\'');
+	} else if (args[0].includes('’')) {
+		var voidChampionFix = args[0].split('’');
+		voidChampionFix[1] = voidChampionFix[1].charAt(0).toUpperCase() + voidChampionFix[1].slice(1);
+		args[0] = voidChampionFix.join('\'');
+	}
+	
+	var name = args.join(' ');
 	
 	var raw = await this.getAllRawVersionsAndChampionsData();
 

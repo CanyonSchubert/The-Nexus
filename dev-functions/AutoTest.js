@@ -9,7 +9,7 @@ module.exports =  {
             // DEV MODE: Bot sends current working command on startup
         if (devMode.isOn && devMode.autoTest && devMode.autoTestChannel) {
             var autoTestChannel = client.channels.cache.get(devMode.autoTestChannel);
-            autoTestChannel.send(prefix + devMode.workingCmd);
+            autoTestChannel.send(prefix + devMode.workingCmd + ' ' + devMode.workingArgs.join(' '));
         }
     }
 }

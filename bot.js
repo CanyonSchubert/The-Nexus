@@ -3,7 +3,8 @@
 const fs = require('fs');
 const fetch = require('fetch');
 const Discord = require('discord.js');
-const {token, riot_api_key, prefix, dev_mode } = require('./auth.json');
+const {token, riot_api_key, prefix } = require('./auth.json');
+const { devMode } = require('./appConfig.json');
 const AutoTest = require('./dev-functions/AutoTest');
 
 	// Initializes Command Collection and Some Options
@@ -20,20 +21,13 @@ const cooldowns = new Discord.Collection();
 
 var requestID = 1;
 
-const devModeOptions = {
-	devMode : true,
-	autoTest : true,
-	autoTestChannel : '767430610133581865',
-	workingCmd : 'abilities tf',
-}
-
 	// Initializes Bot
 
 client.once('ready', () => {
 	console.log('Connected as: ' + client.user.username + '!\n');
 
 		// DEV MODE: AutoTest
-	if (devModeOptions.devMode) {
+	if (devMode.isOn) {
 		AutoTest.execute();
 	}
 });
@@ -42,7 +36,6 @@ client.login(token);
 
 module.exports = { 
 	client : client,
-	devModeOptions : devModeOptions,
  };
 
 	// Message Handler

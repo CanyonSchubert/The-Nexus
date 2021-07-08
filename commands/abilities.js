@@ -1,4 +1,4 @@
-const ChampionAPI = require('../Models/ChampionModel');
+const ChampionAPI = require('../models/ChampionModel');
 const Discord = require('discord.js');
 const { prefix } = require('../appConfig.json');
 
@@ -12,27 +12,12 @@ module.exports = {
 		if (args[args.length-1].toLowerCase() == 'p' || args[args.length-1].toLowerCase() == 'q' || 
 			args[args.length-1].toLowerCase() == 'w' || args[args.length-1].toLowerCase() == 'e' || 
 			args[args.length-1].toLowerCase() == 'r') {
-				var abilityArg = args.splice(args.length-1).toString().toLowerCase();	
+				var abilityArg = args.pop().toString().toLowerCase();	
 		}
-		
-		args[0] = args[0].charAt(0).toUpperCase() + args[0].slice(1);
-		
-		if (args[0].includes('\'')) {
-			var voidChampionFix = args[0].split('\'');
-			voidChampionFix[1] = voidChampionFix[1].charAt(0).toUpperCase() + voidChampionFix[1].slice(1);
-			args[0] = voidChampionFix.join('\'');
-		} else if (args[0].includes('’')) {
-			var voidChampionFix = args[0].split('’');
-			voidChampionFix[1] = voidChampionFix[1].charAt(0).toUpperCase() + voidChampionFix[1].slice(1);
-			args[0] = voidChampionFix.join('\'');
-		}
-		
-		if (args[1] && args[1] != abilityArg) args[1] = args[1].charAt(0).toUpperCase() + args[1].slice(1);
-		championArg = args.toString().replace(/,/g, ' ');
 						
 		var raw = await ChampionAPI.getAllRawVersionsAndChampionsData();
 
-		var champion = await ChampionAPI.getChampionByName(championArg);
+		var champion = await ChampionAPI.getChampionByName(args);
 		if (champion == "Champion not found.") {
 			message.channel.send("I can\'t find that champion, please try again.");
 			return;
@@ -68,7 +53,7 @@ module.exports = {
 				.setTimestamp()
 				.setFooter('Nexus.gg')
 			);
-		} else if (abilityArg == 'p') {
+		} else if (abilityArg.toLowerCase() == 'p') {
 			message.channel.send(new Discord.MessageEmbed()
 				.setColor('#2e8fc2')
 				.setTitle('Ability Textbook')
@@ -77,9 +62,9 @@ module.exports = {
 				.setTimestamp()
 				.setFooter('Nexus.gg')
 			);
-		} else if (abilityArg == 'q' || abilityArg == 'w' || abilityArg == 'e' || abilityArg == 'r') {
+		} else if (abilityArg.toLowerCase() == 'q' || abilityArg.toLowerCase() == 'w' || abilityArg.toLowerCase() == 'e' || abilityArg.toLowerCase() == 'r') {
 			var numAb;
-			switch (abilityArg) {
+			switch (abilityArg.toLowerCase()) {
 				case 'q': numAb = 0; break;
 				case 'w': numAb = 1; break;
 				case 'e': numAb = 2; break;
