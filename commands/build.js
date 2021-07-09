@@ -38,7 +38,7 @@ module.exports = {
         await page.goto(uggHttpHijackStr, {waitUntil:'domcontentloaded'});
         var payload = await page.evaluate(this.pageEvaluation);
         if (devMode.isOn) console.log(payload);
-        browser.close();
+        //browser.close();
 
             // Embed messages set up and return
         var nextEmbed = new Discord.MessageEmbed()
@@ -93,15 +93,15 @@ module.exports = {
             summonerSpellTwo : document.getElementsByClassName('content-section_content summoner-spells')[0].children[1].children[1].alt,
             summonerSpellTwoImage : document.getElementsByClassName('content-section_content summoner-spells')[0].children[1].children[1].src,
 
-            /*skillMaxFirst : ,
-            skillMaxFirstImage : ,
-            skillMaxSecond : ,
-            skillMaxSecondImage : ,
-            skillMaxThird : ,
-            skillMaxThirdImage : ,
-            skillOpeningPath : ,
+            skillMaxFirst : document.getElementsByClassName('champion-skill-with-label')[0].children[1].textContent,
+            skillMaxFirstImage : document.getElementsByClassName('champion-skill-with-label')[0].children[0].src,
+            skillMaxSecond : document.getElementsByClassName('champion-skill-with-label')[1].children[1].textContent,
+            skillMaxSecondImage : document.getElementsByClassName('champion-skill-with-label')[1].children[0].src,
+            skillMaxThird : document.getElementsByClassName('champion-skill-with-label')[2].children[1].textContent,
+            skillMaxThirdImage : document.getElementsByClassName('champion-skill-with-label')[2].children[0].src,
+            skillPath : '',
 
-            itemStartingOne : ,
+            /*itemStartingOne : ,
             itemStartingOneImage : ,
             itemStartingTwo : ,
             itemStartingTwoImage : ,
@@ -114,6 +114,37 @@ module.exports = {
 
         };
 
+            // SkillPath calculations
+        var skillPath = document.getElementsByClassName('skill-path-container')[0];
+        var skillOrderRows = skillPath.children;
+
+        var skillQ = [];
+        var skillW = [];
+        var skillE = [];
+        var skillR = [];
+        var skills = [skillQ, skillW, skillE, skillR];
+        var skillChars = ['Q', 'W', 'E', 'R']
+        var skillOrder = [];
+
+        for (var i = 0; i < skills.length; ++i) {
+            var skillOrderRow = skillOrderRows.item(i);
+            for (var k = 0; k < 18; ++k) {
+                skills[i].push(skillOrderRow.children[1].children[k].className);
+            }
+            console.log(skills[i]);
+        }
+        for (var i = 0; i < 18; ++i) {
+            for (var j = 0; j < skills.length; ++j) {
+                //console.log(skills[j][i]);
+                if (skills[j][i] != 'no-skill-up') {
+                    skillOrder.push(skillChars[j]);
+                    break;
+                }
+            }
+        }
+        payloadObject.skillPath = skillOrder;
+
+            // Returns the payload from U.GG
         return payloadObject;
     },
     specialClausesCheck(name) {
