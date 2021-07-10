@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 const ChampionAPI = require('../models/ChampionModel');
 const Discord = require('discord.js');
+const { callbackify } = require('util');
 
 module.exports = {
     name : 'build',
@@ -14,7 +15,7 @@ module.exports = {
         const { devMode } = require('../appConfig.json');
 
             // Valid entries for the mandatory role argument
-        const validRoles = ['top','jungle','middle','adc','support'];
+        const validRoles = ['top','jungle','middle','adc','support']; // TODO: allow for normalized roles like "bot" or "mid"
 
             // Sets and checks the role arg
         var championRole = args.pop();
@@ -33,15 +34,60 @@ module.exports = {
 
             // Puppeteer scraping of u.gg
         var uggHttpHijackStr = 'https://u.gg/lol/champions/' + championName + '/build?region=kr&role=' + championRole;
-        const browser = await puppeteer.launch( { headless : false } );
+        const browser = await puppeteer.launch( { headless : true } );
         const page = await browser.newPage();
         await page.goto(uggHttpHijackStr, {waitUntil:'domcontentloaded'});
         var payload = await page.evaluate(this.pageEvaluation);
         if (devMode.isOn) console.log(payload);
         //browser.close();
 
+            // ReactionCollector Setup
+        const reactionHome = '🏠';
+        const reactionRunes = '🇷'
+        const reactionSkills = '🇸';
+        const reactionItems = '🇮';
+        const reactionNav = [reactionHome, reactionRunes, reactionSkills, reactionItems];
+        const killTimer = 300000;
+
+            // Reaction Collector constructor
+        function attachReactionCollector(message) {
+            const reactionCollector = message.createReactionCollector(filter, { time : killTimer, dispose : true });
+            reactionCollector.on('collect', reaction => {
+                console.log(reaction);
+                onCollect(reaction.emoji, message);
+            });
+            reactionCollector.on('remove', reaction => {
+                onCollect(reaction.emoji, message);
+            });
+            reactionCollector.on('end', () => {
+                message.reactions.removeAll();                
+            });
+        }
+
+            // Reaction Collector onCollect
+        function onCollect(emoji, message) {
+            if (emoji.name === reactionHome) {
+                message.edit(homeEmbed);
+            }
+            if (emoji.name === reactionRunes) {
+                console.log('reactionRunes');
+                message.edit(runesFirstEmbed);
+            }
+            if (emoji.name === reactionSkills) {
+                message.edit();
+            }
+            if (emoji.name === reactionItems) {
+                message.edit();
+            }
+        }
+
+            // Reaction Collector filter
+        function filter(reaction, user) {
+            return !user.bot && user.id == message.author.id && reactionNav.includes(reaction.emoji.name);
+        }
+
             // Embed messages set up and return
-        var nextEmbed = new Discord.MessageEmbed()
+        var homeEmbed = new Discord.MessageEmbed()
             .setTitle(champion.name + ' - ' + championRole.charAt(0).toUpperCase() + championRole.substring(1, championRole.length))
             .setColor('#2e8fc2')
             .setAuthor('Information from U.GG', null, uggHttpHijackStr)
@@ -54,7 +100,27 @@ module.exports = {
             .setTimestamp()
             .setFooter('Nexus.gg')
         ;
-        return message.channel.send(nextEmbed);
+
+        var runesFirstEmbed = new Discord.MessageEmbed()
+            .setTitle(champion.name + ' - ' + championRole.charAt(0).toUpperCase() + championRole.substring(1, championRole.length))
+            .setColor('#2e8fc2')
+            .setAuthor('Information from U.GG', null, uggHttpHijackStr)
+            .setThumbnail(payload.runeTreePrimaryKeystoneImage)
+            .addField('Keystone', payload.runeTreePrimaryKeystone.split('The Keystone ')[1], true)
+            .setImage('https://static.u.gg/assets/ugg/logo/ugg-logo.svg')
+            .setTimestamp()
+            .setFooter('Nexus.gg')
+        ;
+
+        // TODO: runes embeds, skills embeds, items embeds
+
+        return message.channel.send(homeEmbed)
+            .then(message => message.react(reactionHome))
+            .then(messageReaction => messageReaction.message.react(reactionRunes))
+            .then(messageReaction => messageReaction.message.react(reactionSkills))
+            .then(messageReaction => messageReaction.message.react(reactionItems))
+            .then(messageReaction => attachReactionCollector(messageReaction.message))
+            ;
     },
     pageEvaluation() {
         console.log('PUPPETEER ENTRY POINT');

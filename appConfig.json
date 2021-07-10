@@ -4,7 +4,7 @@
         "//":"DEV MODE SECTION:",
     "devMode":{
         "isOn":true,
-        "autoTest":true,
+        "autoTest":false,
         "autoTestChannel":"767430610133581865",
         "workingCmd":"build",
         "workingArgs":["tf","middle"]
