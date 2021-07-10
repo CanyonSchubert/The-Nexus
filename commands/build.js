@@ -189,7 +189,7 @@ module.exports = {
         var skillE = [];
         var skillR = [];
         var skills = [skillQ, skillW, skillE, skillR];
-        var skillChars = ['Q', 'W', 'E', 'R']
+        var skillChars = ['Q', 'W', 'E', 'R'];
         var skillOrder = [];
 
         for (var i = 0; i < skills.length; ++i) {
