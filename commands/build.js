@@ -47,13 +47,12 @@ module.exports = {
         const reactionSkills = '🇸';
         const reactionItems = '🇮';
         const reactionNav = [reactionHome, reactionRunes, reactionSkills, reactionItems];
-        const killTimer = 300000;
+        const killTimer = 3600000;
 
             // Reaction Collector constructor
         function attachReactionCollector(message) {
             const reactionCollector = message.createReactionCollector(filter, { time : killTimer, dispose : true });
             reactionCollector.on('collect', reaction => {
-                console.log(reaction);
                 onCollect(reaction.emoji, message);
             });
             reactionCollector.on('remove', reaction => {
@@ -70,7 +69,6 @@ module.exports = {
                 message.edit(homeEmbed);
             }
             if (emoji.name === reactionRunes) {
-                console.log('reactionRunes');
                 message.edit(runesFirstEmbed);
             }
             if (emoji.name === reactionSkills) {
@@ -167,17 +165,19 @@ module.exports = {
             skillMaxThirdImage : document.getElementsByClassName('champion-skill-with-label')[2].children[0].src,
             skillPath : '',
 
-            /*itemStartingOne : ,
-            itemStartingOneImage : ,
-            itemStartingTwo : ,
-            itemStartingTwoImage : ,
-            itemCoreOne : ,
-            itemCoreOneImage : ,
-            itemCoreTwo : ,
-            itemCoreTwoImage : ,
-            itemCoreThree : ,
-            itemCoreThreeImage : ,*/
-
+            itemStartingOne : document.getElementsByClassName('content-section_content starting-items')[0].getElementsByClassName('item-img')[0].children[0].children[0].style,
+            itemStartingTwo : document.getElementsByClassName('content-section_content starting-items')[0].getElementsByClassName('item-img')[1].children[0].children[0].style,
+            itemCoreOne : document.getElementsByClassName('content-section_content core-items')[0].getElementsByClassName('item-img')[0].children[0].children[0].style,
+            itemCoreTwo : document.getElementsByClassName('content-section_content core-items')[0].getElementsByClassName('item-img')[1].children[0].children[0].style,
+            itemCoreThree : document.getElementsByClassName('content-section_content core-items')[0].getElementsByClassName('item-img')[2].children[0].children[0].style,
+            itemFourthOne : document.getElementsByClassName('content-section_content item-options item-options-1')[0].getElementsByClassName('item-img')[0].children[0].children[0].style,
+            itemFourthTwo : document.getElementsByClassName('content-section_content item-options item-options-1')[0].getElementsByClassName('item-img')[1].children[0].children[0].style,
+            itemFifthOne : document.getElementsByClassName('content-section_content item-options item-options-2')[0].getElementsByClassName('item-img')[0].children[0].children[0].style,
+            itemFifthTwo : document.getElementsByClassName('content-section_content item-options item-options-2')[0].getElementsByClassName('item-img')[1].children[0].children[0].style,
+            itemFifthThree : document.getElementsByClassName('content-section_content item-options item-options-2')[0].getElementsByClassName('item-img')[2].children[0].children[0].style,
+            itemSixthOne : document.getElementsByClassName('content-section_content item-options item-options-3')[0].getElementsByClassName('item-img')[0].children[0].children[0].style,
+            itemSixthTwo : document.getElementsByClassName('content-section_content item-options item-options-3')[0].getElementsByClassName('item-img')[1].children[0].children[0].style,
+            itemSixthThree : document.getElementsByClassName('content-section_content item-options item-options-3')[0].getElementsByClassName('item-img')[2].children[0].children[0].style
         };
 
             // SkillPath calculations
@@ -209,6 +209,8 @@ module.exports = {
             }
         }
         payloadObject.skillPath = skillOrder;
+
+            // Item Payload Calculations
 
             // Returns the payload from U.GG
         return payloadObject;
